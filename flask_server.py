@@ -1,19 +1,25 @@
-# Save this code in a file, e.g., server.py
+# main.py
+from fastapi import FastAPI, UploadFile, HTTPException
+# import cv2
+# from ultralytics import YOLO
 
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import time
+# import numpy as np
+app = FastAPI()
+# from PIL import Image
+# from io import BytesIO
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
 
-@app.route('/update_orientation', methods=['POST'])
-def update_orientation():
-    data = request.get_json()
-    print(f"Received data: {data}")
-    # Process the received data as needed
 
-    return jsonify({"status": "success"})
 
-if __name__ == '__main__':
-    app.run()
+@app.get("/")
+async def read_root():
+    return {"Hello": "World"}
+
+@app.post("/predict/")
+async def predict_image(data):
+    print(data)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

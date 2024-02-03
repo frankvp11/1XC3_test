@@ -4,9 +4,9 @@ from kivy.lang import Builder
 from kivy.properties import NumericProperty
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
-# import requests
-# import json
+
 from kivy.network.urlrequest import UrlRequest
+
 interface = Builder.load_string('''
 #:import facade plyer.spatialorientation
 
@@ -64,30 +64,20 @@ class SpOrientationInterface(BoxLayout):
         self.facade.disable_listener()
         Clock.unschedule(self.get_orientation)
 
-    def get_orientation(self, dt):
+    def get_orientation(self, dt=0):
         if self.facade.orientation != (None, None, None):
             self.azimuth, self.pitch, self.roll = self.facade.orientation
 
-    def send_orientation_data(self):
+    def send_orientation_data(self, dt):
         data = {
             "azimuth": self.azimuth,
             "pitch": self.pitch,
             "roll": self.roll
         }
 
-        # Modify the URL to match your server's address
-        url = "http://127.0.0.1:5000/update_orientation"
-        # headers = {'Content-Type': 'application/json'}
+        url = "http://172.17.0.1:8000/predict"
         request=  UrlRequest(url, req_body=data, req_headers={'Content-Type': 'application/json'})
-        
-        # try:
-        #     response = requests.post(url, data=json.dumps(data), headers=headers)
-        #     if response.status_code == 200:
-        #         print("Data sent successfully.")
-        #     else:
-        #         print(f"Failed to send data. Status code: {response.status_code}")
-        # except Exception as e:
-        #     print(f"Error during request: {e}")
+
 
 
 class SpOrientationTestApp(App):
